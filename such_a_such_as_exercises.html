@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Such a / Such as — Interactive Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1714;
+    --paper: #f7f4ef;
+    --cream: #ede9e2;
+    --gold: #c8a96e;
+    --gold-light: #f0e4c8;
+    --gold-dark: #8a6f3e;
+    --sage: #7a9e8e;
+    --sage-light: #ddeee7;
+    --coral: #d4614a;
+    --coral-light: #fae8e4;
+    --muted: #7a7368;
+    --border: #d9d3c8;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* Header */
+  .header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3rem 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: rgba(200,169,110,0.12);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(200,169,110,0.07);
+  }
+  .header-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+  .level-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border: 1px solid rgba(200,169,110,0.5);
+    border-radius: 20px;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  .header h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .header h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .header p {
+    font-size: 14px;
+    color: rgba(247,244,239,0.6);
+    max-width: 480px;
+  }
+
+  /* Grammar Box */
+  .grammar-section { background: var(--cream); border-bottom: 1px solid var(--border); }
+  .grammar-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  @media(max-width: 560px) { .grammar-inner { grid-template-columns: 1fr; } }
+  .grammar-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .grammar-card .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 0.75rem;
+  }
+  .tag-gold { background: var(--gold-light); color: var(--gold-dark); }
+  .tag-sage { background: var(--sage-light); color: #3d6657; }
+  .grammar-card h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+  .grammar-card p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+  .grammar-card .ex {
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--paper);
+    padding: 8px 12px;
+    border-radius: 6px;
+    border-left: 3px solid;
+    margin-bottom: 6px;
+  }
+  .ex-gold { border-color: var(--gold); }
+  .ex-sage { border-color: var(--sage); }
+  .grammar-card .ex strong { font-weight: 500; }
+
+  /* Main */
+  .main { max-width: 760px; margin: 0 auto; padding: 2rem; }
+
+  /* Tabs */
+  .tabs-wrap { display: flex; gap: 6px; margin-bottom: 2rem; flex-wrap: wrap; }
+  .tab {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 7px 16px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    color: var(--muted);
+    background: white;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .tab:hover { border-color: var(--gold); color: var(--gold-dark); }
+  .tab.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  /* Score */
+  .score-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 2rem;
+    padding: 14px 16px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .score-label { font-size: 12px; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }
+  .score-track { flex: 1; height: 5px; background: var(--cream); border-radius: 3px; overflow: hidden; }
+  .score-fill { height: 100%; background: var(--gold); border-radius: 3px; width: 0%; transition: width 0.5s ease; }
+  .score-num { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 300; color: var(--ink); min-width: 44px; text-align: right; }
+
+  /* Sections */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* Cards */
+  .ex-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+    animation: fadeUp 0.3s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .ex-num {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .ex-question {
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+  }
+  .ex-question .blank {
+    display: inline-block;
+    min-width: 80px;
+    border-bottom: 2px dashed var(--gold);
+    padding: 0 4px;
+    color: var(--gold-dark);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  /* MC Options */
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media(max-width: 480px) { .opts { grid-template-columns: 1fr; } }
+  .opt-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.18s;
+    letter-spacing: 0.01em;
+  }
+  .opt-btn:hover:not(.locked) { border-color: var(--gold); background: var(--gold-light); }
+  .opt-btn.correct { background: var(--sage-light); border-color: var(--sage); color: #2d5545; }
+  .opt-btn.wrong { background: var(--coral-light); border-color: var(--coral); color: #8a2515; }
+  .opt-btn.locked { cursor: default; }
+
+  /* Fill input */
+  .fill-inp {
+    width: 100%;
+    margin: 0 0 8px;
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--paper);
+    color: var(--ink);
+    transition: border-color 0.2s;
+  }
+  .fill-inp:focus { outline: none; border-color: var(--gold); }
+  .fill-inp.ok { border-color: var(--sage); background: var(--sage-light); color: #2d5545; }
+  .fill-inp.no { border-color: var(--coral); background: var(--coral-light); color: #8a2515; }
+  .hint-text { font-size: 12px; color: var(--muted); font-style: italic; margin-bottom: 10px; }
+
+  /* Transform input */
+  .transform-inp {
+    width: 100%;
+    margin: 0 0 8px;
+    padding: 10px 14px;
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    font-weight: 300;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--paper);
+    color: var(--ink);
+    transition: border-color 0.2s;
+    font-style: italic;
+  }
+  .transform-inp:focus { outline: none; border-color: var(--gold); }
+
+  /* Check button */
+  .check-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 8px 18px;
+    border: 1px solid var(--ink);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.18s;
+    letter-spacing: 0.02em;
+  }
+  .check-btn:hover { background: var(--ink); color: var(--paper); }
+
+  /* Feedback */
+  .feedback {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+    display: none;
+  }
+  .feedback.show { display: block; animation: fadeUp 0.2s ease; }
+  .feedback.ok { background: var(--sage-light); color: #2d5545; border-left: 3px solid var(--sage); }
+  .feedback.no { background: var(--coral-light); color: #8a2515; border-left: 3px solid var(--coral); }
+  .feedback.info { background: var(--gold-light); color: var(--gold-dark); border-left: 3px solid var(--gold); }
+
+  /* Section intro */
+  .sec-intro {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    padding: 12px 16px;
+    background: var(--cream);
+    border-radius: 8px;
+    border-left: 3px solid var(--gold);
+  }
+
+  /* Reset */
+  .reset-wrap { text-align: center; padding: 2rem 0 1rem; }
+  .reset-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 7px 18px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: all 0.18s;
+  }
+  .reset-btn:hover { border-color: var(--coral); color: var(--coral); }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 12px;
+    color: var(--border);
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="level-badge">B1 · B2 · Grammar Practice</div>
+    <h1>Such <em>a</em> — Such <em>as</em></h1>
+    <p>Interactive exercises to master two essential structures in English. 3 exercise types · instant feedback · score tracking.</p>
+  </div>
+</header>
+
+<div class="grammar-section">
+  <div class="grammar-inner">
+    <div class="grammar-card">
+      <span class="tag tag-gold">such a / such an + noun</span>
+      <h3>Expressing intensity or surprise</h3>
+      <p>Used before a singular countable noun (with adjective or alone) to intensify feeling or opinion.</p>
+      <div class="ex ex-gold">It was <strong>such a</strong> great show!</div>
+      <div class="ex ex-gold">She is <strong>such an</strong> amazing teacher.</div>
+      <div class="ex ex-gold">He made <strong>such a</strong> long speech.</div>
+    </div>
+    <div class="grammar-card">
+      <span class="tag tag-sage">such as + examples</span>
+      <h3>Giving examples of a category</h3>
+      <p>Used to introduce specific examples of a general group or category mentioned before it.</p>
+      <div class="ex ex-sage">I love music <strong>such as</strong> jazz and bossa nova.</div>
+      <div class="ex ex-sage">Skills <strong>such as</strong> coding are in demand.</div>
+      <div class="ex ex-sage">Cities <strong>such as</strong> São Paulo are vibrant.</div>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="tabs-wrap">
+    <button class="tab active" onclick="showTab('mc')">1 · Multiple choice</button>
+    <button class="tab" onclick="showTab('fill')">2 · Fill in the blank</button>
+    <button class="tab" onclick="showTab('transform')">3 · Sentence transform</button>
+  </div>
+
+  <div class="score-row">
+    <span class="score-label">Score</span>
+    <div class="score-track"><div class="score-fill" id="score-fill"></div></div>
+    <span class="score-num" id="score-num">0 / 0</span>
+  </div>
+
+  <!-- SECTION 1: Multiple choice -->
+  <div class="section active" id="sec-mc">
+    <div class="sec-intro">Choose the correct option to complete each sentence.</div>
+    <div id="mc-items"></div>
+  </div>
+
+  <!-- SECTION 2: Fill in blank -->
+  <div class="section" id="sec-fill">
+    <div class="sec-intro">Complete each sentence with <em>such a</em>, <em>such an</em>, or <em>such as</em>. Read the hint for guidance.</div>
+    <div id="fill-items"></div>
+  </div>
+
+  <!-- SECTION 3: Transform -->
+  <div class="section" id="sec-transform">
+    <div class="sec-intro">Rewrite each sentence using <strong>such a</strong> or <strong>such as</strong> as instructed. Type your answer and then check the suggested version.</div>
+    <div id="transform-items"></div>
+  </div>
+
+  <div class="reset-wrap">
+    <button class="reset-btn" onclick="resetAll()">↺ Reset all exercises</button>
+  </div>
+</main>
+
+<footer>Such a / Such as · B1–B2 Practice · Interactive Grammar Worksheet</footer>
+
+<script>
+const mcData = [
+  { q: "___ disappointment! I expected so much more from that film.", opts: ["Such a", "Such as", "So", "Such"], ans: 0, explain: '"Such a" + noun (disappointment) expresses strong negative feeling.' },
+  { q: "I love genres ___ thriller, sci-fi, and mystery.", opts: ["such as", "such a", "so", "like a"], ans: 0, explain: '"Such as" introduces examples of genres — a category.' },
+  { q: "She has ___ beautiful voice! Everyone was amazed.", opts: ["such a", "such as", "so a", "such"], ans: 0, explain: '"Such a" + adjective + noun. We need the article "a" here.' },
+  { q: "Learning skills ___ coding and design can boost your career.", opts: ["such as", "such a", "like as", "so as"], ans: 0, explain: '"Such as" gives examples of skills that belong to a category.' },
+  { q: "It was ___ long meeting that everyone forgot the main decisions.", opts: ["such a", "such", "so a", "such as"], ans: 0, explain: '"Such a" + adjective + noun (such a long meeting).' },
+  { q: "I admire artists ___ Caetano Veloso and Elis Regina.", opts: ["such as", "such a", "such an", "like such"], ans: 0, explain: '"Such as" introduces specific examples of artists.' },
+  { q: "He is ___ inspiring person. He changed my whole perspective.", opts: ["such an", "such a", "so an", "such as"], ans: 0, explain: '"Such an" is used before vowel sounds — "inspiring" starts with a vowel.' },
+  { q: "I prefer natural materials ___ wood, cotton, and linen.", opts: ["such as", "such a", "so", "such"], ans: 0, explain: '"Such as" introduces examples of a broader category (natural materials).' }
+];
+
+const fillData = [
+  { q: "That was ___ incredible performance. I had goosebumps the whole time.", answer: "such an", hint: "Vowel sound: 'incredible' starts with a vowel." },
+  { q: "Cities ___ São Paulo, New York and London are known for their music scenes.", answer: "such as", hint: "Introducing examples of cities." },
+  { q: "She gave ___ detailed explanation that even beginners understood.", answer: "such a", hint: "Noun 'explanation' — consonant sound." },
+  { q: "Instruments ___ guitar, piano and violin are common in popular music.", answer: "such as", hint: "Introducing examples of instruments." },
+  { q: "It's ___ competitive industry! Only the most determined survive.", answer: "such a", hint: "Noun 'industry' — consonant sound, singular." },
+  { q: "Soft skills ___ communication and empathy are highly valued.", answer: "such as", hint: "Introducing examples of soft skills." }
+];
+
+const transformData = [
+  { original: "The workshop was very impressive.", instruction: "Rewrite using: <em>such an</em>", suggested: "It was such an impressive workshop!" },
+  { original: "I enjoy streaming platforms, for example Netflix, Spotify, and YouTube.", instruction: "Rewrite using: <em>such as</em>", suggested: "I enjoy streaming platforms such as Netflix, Spotify, and YouTube." },
+  { original: "He is a very talented producer.", instruction: "Rewrite using: <em>such a</em>", suggested: "He is such a talented producer!" },
+  { original: "Genres like funk, samba and pagode are important to Brazilian culture.", instruction: "Rewrite using: <em>such as</em>", suggested: "Genres such as funk, samba and pagode are important to Brazilian culture." },
+  { original: "That was a very strange experience.", instruction: "Rewrite using: <em>such a</em>", suggested: "That was such a strange experience!" }
+];
+
+let correct = 0, total = 0;
+
+function updateScore(ok) {
+  if (ok !== null) { if (ok) correct++; total++; }
+  document.getElementById('score-num').textContent = correct + ' / ' + total;
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+  document.getElementById('score-fill').style.width = pct + '%';
+}
+
+function showTab(id) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const map = { mc:0, fill:1, transform:2 };
+  document.querySelectorAll('.tab')[map[id]].classList.add('active');
+  document.getElementById('sec-' + id).classList.add('active');
+}
+
+function buildMC() {
+  const el = document.getElementById('mc-items');
+  el.innerHTML = '';
+  mcData.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'ex-card';
+    div.style.animationDelay = (i * 0.04) + 's';
+    const qHTML = item.q.replace('___', '<span class="blank">___</span>');
+    div.innerHTML = `
+      <div class="ex-num">Question ${i+1} of ${mcData.length}</div>
+      <div class="ex-question">${qHTML}</div>
+      <div class="opts">
+        ${item.opts.map((o,j) => `<button class="opt-btn" onclick="checkMC(this,${i},${j})">${o}</button>`).join('')}
+      </div>
+      <div class="feedback" id="fb-mc-${i}"></div>`;
+    el.appendChild(div);
+  });
+}
+
+function checkMC(btn, qi, ji) {
+  const card = btn.closest('.ex-card');
+  if (card.dataset.done) return;
+  card.dataset.done = '1';
+  const btns = card.querySelectorAll('.opt-btn');
+  btns.forEach(b => b.classList.add('locked'));
+  const ok = ji === mcData[qi].ans;
+  btn.classList.add(ok ? 'correct' : 'wrong');
+  if (!ok) btns[mcData[qi].ans].classList.add('correct');
+  const fb = document.getElementById('fb-mc-' + qi);
+  fb.innerHTML = (ok ? '✓ &nbsp;Correct! ' : '✗ &nbsp;Not quite. ') + mcData[qi].explain;
+  fb.className = 'feedback show ' + (ok ? 'ok' : 'no');
+  updateScore(ok);
+}
+
+function buildFill() {
+  const el = document.getElementById('fill-items');
+  el.innerHTML = '';
+  fillData.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'ex-card';
+    div.style.animationDelay = (i * 0.04) + 's';
+    const qHTML = item.q.replace('___', '<span class="blank">___</span>');
+    div.innerHTML = `
+      <div class="ex-num">Question ${i+1} of ${fillData.length}</div>
+      <div class="ex-question">${qHTML}</div>
+      <p class="hint-text">💡 Hint: ${item.hint}</p>
+      <input class="fill-inp" id="fi-${i}" type="text" placeholder="such a / such an / such as" autocomplete="off">
+      <button class="check-btn" onclick="checkFill(${i})">Check answer</button>
+      <div class="feedback" id="fb-fill-${i}"></div>`;
+    el.appendChild(div);
+    document.getElementById('fi-' + i).addEventListener('keydown', e => { if(e.key==='Enter') checkFill(i); });
+  });
+}
+
+function checkFill(i) {
+  const inp = document.getElementById('fi-' + i);
+  if (inp.disabled) return;
+  const val = inp.value.trim().toLowerCase();
+  const ok = val === fillData[i].answer.toLowerCase();
+  inp.disabled = true;
+  inp.classList.add(ok ? 'ok' : 'no');
+  const fb = document.getElementById('fb-fill-' + i);
+  fb.innerHTML = ok ? '✓ &nbsp;Correct!' : `✗ &nbsp;The correct answer is: <strong>${fillData[i].answer}</strong>`;
+  fb.className = 'feedback show ' + (ok ? 'ok' : 'no');
+  updateScore(ok);
+}
+
+function buildTransform() {
+  const el = document.getElementById('transform-items');
+  el.innerHTML = '';
+  transformData.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'ex-card';
+    div.style.animationDelay = (i * 0.04) + 's';
+    div.innerHTML = `
+      <div class="ex-num">Question ${i+1} of ${transformData.length}</div>
+      <div class="ex-question" style="margin-bottom:0.5rem;">${item.original}</div>
+      <p class="hint-text">${item.instruction}</p>
+      <textarea class="transform-inp" id="tr-${i}" rows="2" placeholder="Write your version here..."></textarea>
+      <button class="check-btn" onclick="checkTransform(${i})">See suggested answer</button>
+      <div class="feedback" id="fb-tr-${i}"></div>`;
+    el.appendChild(div);
+  });
+}
+
+function checkTransform(i) {
+  const inp = document.getElementById('tr-' + i);
+  if (inp.disabled) return;
+  inp.disabled = true;
+  const fb = document.getElementById('fb-tr-' + i);
+  fb.innerHTML = `Suggested answer: <strong>${transformData[i].suggested}</strong> — Compare with yours and notice the structure.`;
+  fb.className = 'feedback show info';
+}
+
+function resetAll() {
+  correct = 0; total = 0;
+  updateScore(null);
+  buildMC(); buildFill(); buildTransform();
+}
+
+buildMC(); buildFill(); buildTransform();
+</script>
+</body>
+</html>
